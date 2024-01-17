@@ -42,4 +42,28 @@ public class UniversityController {
     public boolean delete(@PathVariable("universityId") String universityId ) {
         return universityService.deleteUniversityById(universityId);
     }
+
+    @GetMapping("/v1/findByNameAndId/{universityName}/{universityId}")
+    public UniversityDTO findByNameAndId(@PathVariable("universityName")String universityName,@PathVariable("universityId") String universityId) {
+        return universityService.findBYNameAndId(universityId,universityName);
+    }
+    @GetMapping("/v1/findByNameAndIdJPQL/{universityName}/{universityId}")
+    public UniversityDTO findByNameAndIdJPQL(@PathVariable("universityName")String universityName,@PathVariable("universityId") String universityId) {
+        return universityService.findBYNameAndIdJPQL(universityId,universityName);
+    }
+
+    @GetMapping("/v1/findByNameAndIdNative/{universityName}/{universityId}")
+    public UniversityDTO findByNameAndIdNative(@PathVariable("universityName")String universityName,@PathVariable("universityId") String universityId) {
+        return universityService.findBYNameAndIdNative(universityId,universityName);
+    }
+
+    @PostMapping("/v1/findAllByState/named")
+    public List<UniversityDTO> findAllByStateNamed(@RequestBody List<String> states) {
+        return universityService.findAllByState(states);
+    }
+
+    @PostMapping("/v1/findAllByState/namedNative")
+    public List<UniversityDTO> findAllByStateNamedNative(@RequestBody List<String> states) {
+        return universityService.findAllByState(states);
+    }
 }

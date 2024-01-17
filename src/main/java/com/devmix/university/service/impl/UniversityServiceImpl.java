@@ -4,6 +4,7 @@ import com.devmix.university.dto.UniversityDTO;
 import com.devmix.university.entity.UniversityEntity;
 import com.devmix.university.repository.UniversityRepo;
 import com.devmix.university.service.UniversityService;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -78,5 +79,54 @@ public class UniversityServiceImpl implements UniversityService {
             return true;
         }
         return false;
+    }
+
+    @Override
+    public UniversityDTO findBYNameAndId(String universityId, String universityName) {
+        UniversityEntity universityEntity = universityRepo.findByUniversityIdAndUniversityName(universityId,universityName);
+        UniversityDTO universityDTO = new UniversityDTO();
+        BeanUtils.copyProperties(universityEntity,universityDTO);
+        return universityDTO;
+    }
+
+    @Override
+    public UniversityDTO findBYNameAndIdJPQL(String universityId, String universityName) {
+        UniversityEntity universityEntity = universityRepo.findByUniversityIdAndUniversityNameUsingJPQL(universityId,universityName);
+        UniversityDTO universityDTO = new UniversityDTO();
+        BeanUtils.copyProperties(universityEntity,universityDTO);
+        return universityDTO;
+    }
+
+    @Override
+    public UniversityDTO findBYNameAndIdNative(String universityId, String universityName) {
+        UniversityEntity universityEntity = universityRepo.findByUniversityIdAndUniversityNameUsingNative(universityId,universityName);
+        UniversityDTO universityDTO = new UniversityDTO();
+        BeanUtils.copyProperties(universityEntity,universityDTO);
+        return universityDTO;
+    }
+
+    @Override
+    public List<UniversityDTO> findAllByState(List<String> state) {
+        return mapToUniversityDTO(universityRepo.findAllByStateIn(state));
+    }
+
+    @Override
+    public List<UniversityDTO> findAllByStateNamed(List<String> state) {
+        return mapToUniversityDTO(universityRepo.findAllByStateIn(state));
+    }
+
+    @Override
+    public List<UniversityDTO> findAllByStateNamedNative(List<String> state) {
+        return mapToUniversityDTO(universityRepo.findAllByStateIn(state));
+    }
+
+    private List<UniversityDTO> mapToUniversityDTO(List<UniversityEntity> universityEntityList) {
+        List<UniversityDTO> universityDTOList = new ArrayList<>();
+        universityEntityList.forEach(u -> {
+            UniversityDTO universityDTO = new UniversityDTO();
+            BeanUtils.copyProperties(u, universityDTO);
+            universityDTOList.add(universityDTO);
+        });
+        return universityDTOList;
     }
 }
